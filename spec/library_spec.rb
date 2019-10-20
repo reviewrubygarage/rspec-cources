@@ -1,13 +1,16 @@
 require 'library'
 
 RSpec.describe Library do
+  before(:each) do
+    @library = Library.new
+  end
+
   describe '.new' do
     it 'initializes empty Library' do
-      library = Library.new
-      expect(library.books.size).to eq 0
+      expect(@library.books.size).to eq 0
     end
 
-    specify { expect(Library.new.books).to be_a Array }
+    specify { expect(@library.books).to be_a Array }
   end
 
   describe '#add_book' do
@@ -16,15 +19,13 @@ RSpec.describe Library do
     end
 
     it 'adds book with name to library' do
-      library = Library.new
-      library.add_book(name: @book_name)
-      expect(library.books).to match([{name: @book_name}])
+      @library.add_book(name: @book_name)
+      expect(@library.books).to match([{name: @book_name}])
     end
 
     it 'increases books count by 1' do
-      library = Library.new
-      expect { library.add_book(name: @book_name) }.to(
-        change{ library.books.size }.from(0).to(1)
+      expect { @library.add_book(name: @book_name) }.to(
+        change{ @library.books.size }.from(0).to(1)
       )
     end
   end
