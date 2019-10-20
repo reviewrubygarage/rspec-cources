@@ -11,17 +11,19 @@ RSpec.describe Library do
   end
 
   describe '#add_book' do
+    before(:all) do
+      @book_name = 'First book'
+    end
+
     it 'adds book with name to library' do
       library = Library.new
-      book_name = 'First book'
-      library.add_book(name: book_name)
-      expect(library.books).to match([{name: book_name}])
+      library.add_book(name: @book_name)
+      expect(library.books).to match([{name: @book_name}])
     end
 
     it 'increases books count by 1' do
       library = Library.new
-      book_name = 'First book'
-      expect { library.add_book(name: book_name) }.to(
+      expect { library.add_book(name: @book_name) }.to(
         change{ library.books.size }.from(0).to(1)
       )
     end
