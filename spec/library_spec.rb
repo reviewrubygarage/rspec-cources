@@ -1,7 +1,7 @@
 require 'library'
 
 RSpec.describe Library do
-  subject(:library) { Library.new }
+  subject(:library) { described_class.new }
 
   describe '.new' do
     it 'initializes empty Library' do
