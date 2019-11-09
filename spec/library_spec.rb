@@ -1,3 +1,4 @@
+
 require 'library'
 
 RSpec.describe Library do
@@ -15,7 +16,7 @@ RSpec.describe Library do
       library = Library.new
       book_name = 'First book'
       library.add_book(name: book_name)
-      expect(library.books.first[:name]).to eq book_name
+      expect(library.books).to match([{name: book_name}])
     end
 
     it 'increases books count by 1' do
