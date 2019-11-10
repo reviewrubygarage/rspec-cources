@@ -51,4 +51,52 @@ RSpec.describe Library do
       end
     end
   end
+
+  describe '#remove_book' do
+    let(:books) { [{ name: 'Book 1' }] }
+
+    it 'removes book from library' do
+      expect { subject.remove_book(1) }.to(
+        change { subject.books.size }.from(1).to(0)
+      )
+    end
+
+    context 'book with such id does not exist' do
+      it 'raises BookNotFound error' do
+        expect { subject.remove_book(999) }.to raise_error(BookNotFoundError, /with id 999 not found/)
+      end
+    end
+
+    context 'id is nil' do
+      it 'raises DigitValidationError' do
+        expect { subject.remove_book(nil) }.to(
+          raise_error(DigitValidationError)
+        )
+      end
+    end
+
+    context 'id is empty string' do
+      it 'raises DigitValidationError' do
+        expect { subject.remove_book('') }.to(
+          raise_error(DigitValidationError)
+        )
+      end
+    end
+
+    context 'id is not ad digit' do
+      it 'raises DigitValidationError' do
+        expect { subject.remove_book('not_a_digit') }.to(
+          raise_error(DigitValidationError)
+        )
+      end
+    end
+
+    context 'id is zero' do
+      it 'raises DigitValidationError' do
+        expect { subject.remove_book('0') }.to(
+          raise_error(DigitValidationError)
+        )
+      end
+    end
+  end
 end
