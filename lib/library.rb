@@ -14,6 +14,12 @@ class Library
   def show_books
     return EMPTY_LIBRARY_MESSAGE if books.empty?
 
+    compose_books_message
+  end
+
+  private
+
+  def compose_books_message
     books.each_with_index.map do |book, index|
       "#{index + 1}. #{book[:name]}"
     end.join("\n")
