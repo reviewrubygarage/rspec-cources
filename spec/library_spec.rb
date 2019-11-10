@@ -1,4 +1,3 @@
-
 require 'library'
 
 RSpec.describe Library do
@@ -22,9 +21,9 @@ RSpec.describe Library do
     it 'increases books count by 1' do
       library = Library.new
       book_name = 'First book'
-      expect(library.books.size).to eq 0
-      library.add_book(name: book_name)
-      expect(library.books.size).to eq 1
+      expect { library.add_book(name: book_name) }.to(
+        change{ library.books.size }.from(0).to(1)
+      )
     end
   end
 end
