@@ -5,7 +5,7 @@ RSpec.describe Library do
 
   describe '.new' do
     it 'initializes empty Library' do
-      expect(library.books.size).to eq 0
+      expect(library.books.empty?).to be true
     end
 
     specify { expect(library.books).to be_a Array }
