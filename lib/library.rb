@@ -18,9 +18,9 @@ class Library
   end
 
   def remove_book(id)
-    raise DigitValidationError unless is_digit?(id)
+    raise_digit_validation_error(id) unless is_digit?(id)
     book_index = id.to_i - 1
-    raise BookNotFoundError, "Book with id #{id} not found" if books[book_index].nil?
+    raise_not_found_error(id) unless book_exists?(book_index)
     books.delete_at(book_index)
   end
 
@@ -30,6 +30,14 @@ class Library
     books.each_with_index.map do |book, index|
       "#{index + 1}. #{book[:name]}"
     end.join("\n")
+  end
+
+  def raise_not_found_error(id)
+    raise BookNotFoundError, "Book with id #{id} not found"
+  end
+
+  def raise_digit_validation_error(id)
+    raise DigitValidationError, 'Please provide a correct digit value'
   end
 
   def book_exists?(index)
