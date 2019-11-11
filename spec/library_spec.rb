@@ -25,6 +25,26 @@ RSpec.describe Library do
         change{ library.books.size }.from(0).to(1)
       )
     end
+
+    context 'name is nil' do
+      let(:book_name) { nil }
+
+      it 'raises PresenceValidationError' do
+        expect { library.add_book(name: book_name) }.to(
+          raise_error(PresenceValidationError)
+        )
+      end
+    end
+
+    context 'name is empty' do
+      let(:book_name) { '' }
+
+      it 'raises PresenceValidationError' do
+        expect { library.add_book(name: book_name) }.to(
+          raise_error(PresenceValidationError)
+        )
+      end
+    end
   end
 
   describe '#show_books' do

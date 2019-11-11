@@ -8,6 +8,7 @@ class Library
   end
 
   def add_book(name:)
+    raise PresenceValidationError if name.nil? || name.empty?
     books << { name: name }
   end
 
@@ -51,3 +52,4 @@ end
 
 class BookNotFoundError < StandardError; end
 class DigitValidationError < StandardError; end
+class PresenceValidationError < StandardError; end
