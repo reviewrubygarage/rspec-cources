@@ -32,5 +32,19 @@ RSpec.describe Console do
         expect { console }.to output(/Goodbye/).to_stdout
       end
     end
+
+    context 'show books' do
+      let(:expected_books) { 'Expected books' }
+      let(:input_sequence) { %w[show quit] }
+      let(:library_double) { instance_double('Library', show_books: expected_books) }
+
+      before do
+        allow(Library).to receive(:new) { library_double }
+      end
+
+      it 'prints available books on typing show' do
+        expect { console }.to output(/#{expected_books}/).to_stdout
+      end
+    end
   end
 end

@@ -17,8 +17,13 @@ class Console
 
   def choose_option
     show_options
-    input = read_input
-    return false if input == 'quit'
+    case read_input
+    when 'show'
+      puts @library.show_books
+      true
+    when 'quit'
+      false
+    end
   end
 
   def show_options
