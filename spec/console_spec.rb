@@ -54,16 +54,29 @@ RSpec.describe Console do
 
       before do
         allow(Library).to receive(:new) { library_double }
+        allow(library_double).to receive(:add_book)
       end
 
       it 'calls add_book with expected name' do
-        expect(library_double).to receive(:add_book)
-          .with(name: expected_name)
         console
+        expect(library_double).to have_received(:add_book)
+          .with(name: expected_name)
+      end
+
+      it 'prints Enter book name' do
+        expect { console }.to output(/Enter book name/).to_stdout
+      end
+
+      it 'prints Book was successfully added' do
+        expect { console }.to output(/Book was successfully added/).to_stdout
       end
 
       context 'quit after Enter book name message' do
         let(:input_sequence) { %w[add quit] }
+
+        it 'prints Book was successfully added' do
+          expect { console }.not_to output(/Book was successfully added/).to_stdout
+        end
 
         it 'quits from console app when user types quit' do
           expect { console }.to output(/Goodbye/).to_stdout
