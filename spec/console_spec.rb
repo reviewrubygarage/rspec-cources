@@ -82,6 +82,23 @@ RSpec.describe Console do
           expect { console }.to output(/Goodbye/).to_stdout
         end
       end
+
+      context 'name is empty' do
+        let(:input_sequence) { ['add', '', 'quit'] }
+
+        before do
+          allow(library_double).to receive(:add_book)
+            .and_raise(PresenceValidationError)
+        end
+
+        it 'prints Name should be present' do
+          expect { console }.to output(/Name should be present/).to_stdout
+        end
+
+        it 'quits from console app when user types quit' do
+          expect { console }.to output(/Goodbye/).to_stdout
+        end
+      end
     end
   end
 end

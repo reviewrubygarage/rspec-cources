@@ -38,6 +38,9 @@ class Console
     @library.add_book(name: input)
     puts 'Book was successfully added'
     true
+  rescue PresenceValidationError
+    puts 'Name should be present'
+    retry
   end
 
   def show_options
