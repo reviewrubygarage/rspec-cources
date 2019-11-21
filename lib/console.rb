@@ -23,6 +23,8 @@ class Console
       true
     when 'add'
       add_book
+    when 'remove'
+      remove_book
     when 'quit'
       false
     else
@@ -40,6 +42,22 @@ class Console
     true
   rescue PresenceValidationError
     puts 'Name should be present'
+    retry
+  end
+
+  def remove_book
+    puts 'Enter book id'
+    input = read_input
+    return false if input == 'quit'
+
+    @library.remove_book(input)
+    puts 'Book was successfully deleted'
+    true
+  rescue DigitValidationError
+    puts 'Invalid id value'
+    retry
+  rescue BookNotFoundError
+    puts 'Book not found'
     retry
   end
 

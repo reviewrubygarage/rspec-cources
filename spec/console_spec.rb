@@ -74,7 +74,7 @@ RSpec.describe Console do
       context 'quit after Enter book name message' do
         let(:input_sequence) { %w[add quit] }
 
-        it 'prints Book was successfully added' do
+        it 'does not print Book was successfully added' do
           expect { console }.not_to output(/Book was successfully added/).to_stdout
         end
 
@@ -97,6 +97,77 @@ RSpec.describe Console do
 
         it 'quits from console app when user types quit' do
           expect { console }.to output(/Goodbye/).to_stdout
+        end
+      end
+    end
+
+    context 'remove book' do
+      let(:expected_id) { 'id' }
+      let(:input_sequence) { ['remove', expected_id, 'quit'] }
+      let(:library_double) { instance_double('Library') }
+
+      before do
+        allow(Library).to receive(:new) { library_double }
+        allow(library_double).to receive(:remove_book)
+      end
+
+      it 'calls add_book with expected id' do
+        console
+        expect(library_double).to have_received(:remove_book)
+          .with(expected_id)
+      end
+
+      it 'prints Enter book id' do
+        expect { console }.to output(/Enter book id/).to_stdout
+      end
+
+      it 'prints Book was successfully added' do
+        expect { console }.to output(/Book was successfully deleted/).to_stdout
+      end
+
+      context 'quit after Enter book name message' do
+        let(:input_sequence) { %w[remove quit] }
+
+        it 'does not print Book was successfully deleted' do
+          expect { console }.not_to output(/Book was successfully deleted/).to_stdout
+        end
+
+        it 'quits from console app when user types quit' do
+          expect { console }.to output(/Goodbye/).to_stdout
+        end
+      end
+
+      context 'error handling' do
+        let(:input_sequence) { ['remove', '', 'quit'] }
+
+        context 'DigitValidationError' do
+          before do
+            allow(library_double).to receive(:remove_book)
+              .and_raise(DigitValidationError)
+          end
+
+          it 'prints Invalid id value' do
+            expect { console }.to output(/Invalid id value/).to_stdout
+          end
+
+          it 'quits from console app when user types quit' do
+            expect { console }.to output(/Goodbye/).to_stdout
+          end
+        end
+
+        context 'BookNotFoundError' do
+          before do
+            allow(library_double).to receive(:remove_book)
+              .and_raise(BookNotFoundError)
+          end
+
+          it 'prints Book not found' do
+            expect { console }.to output(/Book not found/).to_stdout
+          end
+
+          it 'quits from console app when user types quit' do
+            expect { console }.to output(/Goodbye/).to_stdout
+          end
         end
       end
     end
