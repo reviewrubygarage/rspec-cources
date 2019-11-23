@@ -21,9 +21,23 @@ class Console
     when 'show'
       puts @library.show_books
       true
+    when 'add'
+      add_book
     when 'quit'
       false
+    else
+      'Invalid input'
     end
+  end
+
+  def add_book
+    puts 'Enter book name'
+    input = read_input
+    return false if input == 'quit'
+
+    @library.add_book(name: input)
+    puts 'Book was successfully added'
+    true
   end
 
   def show_options
