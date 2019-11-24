@@ -2,6 +2,13 @@ require_relative 'library'
 
 class Console
   INITIAL_STATE = :greeting
+  ALLOWED_STATES = %i[
+    greeting
+    choose_option
+    add_book
+    remove_book
+    show_books
+  ]
 
   def initialize(initial_state = INITIAL_STATE)
     @library = Library.new
@@ -14,13 +21,9 @@ class Console
       return
     end
     loop do
-      case @state
-      when :greeting then greeting
-      when :choose_option then choose_option
-      when :add_book then add_book
-      when :remove_book then remove_book
-      when :show_books then show_books
-      end
+      break unless ALLOWED_STATES.include?(@state)
+
+      send(@state)
     end
   end
 
