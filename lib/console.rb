@@ -9,6 +9,10 @@ class Console
   end
 
   def run
+    @shut_down = Proc.new do
+      before_shut_down_actions
+      return
+    end
     loop do
       case @state
       when :greeting then greeting
@@ -16,8 +20,6 @@ class Console
       when :add_book then add_book
       when :remove_book then remove_book
       when :show_books then show_books
-      when :goodbye then goodbye
-      when :quit then break
       end
     end
   end
@@ -39,7 +41,6 @@ class Console
     when 'add' then set_state(:add_book)
     when 'remove' then set_state(:remove_book)
     when 'show' then set_state(:show_books)
-    when 'quit' then set_state(:goodbye)
     else
       puts 'Invalid option'
     end
@@ -47,9 +48,7 @@ class Console
 
   def add_book
     puts 'Enter book name'
-    input = read_input
-    set_state(:goodbye) && return if input == 'quit'
-    @library.add_book(name: input)
+    @library.add_book(name: read_input)
     puts 'Book was successfully added'
     set_state(:choose_option)
   rescue PresenceValidationError
@@ -58,9 +57,7 @@ class Console
 
   def remove_book
     puts 'Enter book id'
-    input = read_input
-    set_state(:goodbye) && return if input == 'quit'
-    @library.remove_book(input)
+    @library.remove_book(read_input)
     puts 'Book was successfully deleted'
     set_state(:choose_option)
   rescue BookNotFoundError
@@ -78,12 +75,12 @@ class Console
     @state = state
   end
 
-  def goodbye
+  def before_shut_down_actions
     puts 'Goodbye'
-    set_state(:quit)
   end
 
   def read_input
-    STDIN.gets.chomp
+    input = STDIN.gets.chomp
+    input == 'quit' ? @shut_down.call : input
   end
 end
