@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'pry'
 SimpleCov.start do
   add_filter '/spec/'
   minimum_coverage 93
@@ -8,6 +9,7 @@ Dir[Dir.pwd + "/lib/**/*.rb"].each { |f| require f }
 Dir[Dir.pwd + "/spec/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
+  config.include ConsoleHelper, goodbye_only: true
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end

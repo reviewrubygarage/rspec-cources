@@ -3,11 +3,10 @@ require 'console'
 RSpec.describe Console do
   subject(:console) { described_class.new.run }
 
-  describe 'run' do
+  describe 'run', :goodbye_only  do
     let(:input_sequence) { %w[quit] }
-    before do
-      allow(STDIN).to receive(:gets).and_return(*input_sequence)
-    end
+
+    include_context 'stub gets'
 
     context 'greeting message' do
       it 'prints Hello' do
@@ -29,7 +28,7 @@ RSpec.describe Console do
       end
 
       it 'quits from console app when user types quit' do
-        expect { console }.to output(/Goodbye/).to_stdout
+        check_goodbye
       end
     end
 
@@ -78,8 +77,8 @@ RSpec.describe Console do
           expect { console }.not_to output(/Book was successfully added/).to_stdout
         end
 
-        it 'quits from console app when user types quit' do
-          expect { console }.to output(/Goodbye/).to_stdout
+        it_behaves_like 'check goodbye' do
+          let(:variable) { 'Two' }
         end
       end
 
@@ -96,7 +95,7 @@ RSpec.describe Console do
         end
 
         it 'quits from console app when user types quit' do
-          expect { console }.to output(/Goodbye/).to_stdout
+          check_goodbye
         end
       end
     end
@@ -133,7 +132,7 @@ RSpec.describe Console do
         end
 
         it 'quits from console app when user types quit' do
-          expect { console }.to output(/Goodbye/).to_stdout
+          check_goodbye
         end
       end
 
@@ -151,7 +150,7 @@ RSpec.describe Console do
           end
 
           it 'quits from console app when user types quit' do
-            expect { console }.to output(/Goodbye/).to_stdout
+            check_goodbye
           end
         end
 
@@ -166,7 +165,7 @@ RSpec.describe Console do
           end
 
           it 'quits from console app when user types quit' do
-            expect { console }.to output(/Goodbye/).to_stdout
+            check_goodbye
           end
         end
       end
